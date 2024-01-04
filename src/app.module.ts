@@ -1,14 +1,19 @@
 import { Module } from '@nestjs/common';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ExchangeRate } from './entities/exchange-rate.entity';
-import { ExchangeModule } from './exchange/exchange.module';
+import { ConfigModule } from '@nestjs/config';
 
-import { CurrencyController } from './currency.controller';
-import { CurrencyService } from './currency.service';
+// import { ExchangeModule } from './exchange/exchange.module';
+import { EnvConfiguration } from './config/env.config';
+import { JoiValidationSchema } from './config/joi.validation';
+import { ExchangeRateModule } from './exchange-rate/exchange-rate.module';
+import { ExchangeRate } from './exchange-rate/entities/exchange-rate.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [EnvConfiguration],
+      validationSchema: JoiValidationSchema,
+    }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: ':memory:',
@@ -16,9 +21,8 @@ import { CurrencyService } from './currency.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([ExchangeRate]),
-    ExchangeModule,
+    // ExchangeModule,
+    ExchangeRateModule,
   ],
-  controllers: [CurrencyController],
-  providers: [CurrencyService],
 })
 export class AppModule {}

@@ -1,11 +1,18 @@
-// src/currency.service.ts
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
 import { ExchangeRate } from './entities/exchange-rate.entity';
+// import { CreateExchangeRateDto } from './dto/create-exchange-rate.dto';
+import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 
 @Injectable()
-export class CurrencyService implements OnModuleInit {
+export class ExchangeRateService implements OnModuleInit {
   constructor(
     @InjectRepository(ExchangeRate)
     private readonly exchangeRateRepository: Repository<ExchangeRate>,
@@ -35,6 +42,10 @@ export class CurrencyService implements OnModuleInit {
     }
   }
 
+  // create(createExchangeRateDto: CreateExchangeRateDto) {
+  //   return 'This action adds a new exchangeRate';
+  // }
+
   async calculateExchange(data: any) {
     const { monto, monedaOrigen, monedaDestino } = data;
 
@@ -58,6 +69,48 @@ export class CurrencyService implements OnModuleInit {
       monedaDestino,
       tipoDeCambio: exchangeRateTarget.rate,
     };
+  }
+
+  findAll() {
+    return `This action returns all exchangeRate`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} exchangeRate`;
+  }
+
+  async update(
+    targetCurrency: string,
+    updateExchangeRateDto: UpdateExchangeRateDto,
+  ) {
+    const existingData = await this.exchangeRateRepository.find({
+      where: { targetCurrency },
+    });
+
+    if (!existingData[0]) {
+      throw new NotFoundException(
+        `No se encontro la tasa de cambio ${targetCurrency}`,
+      );
+    }
+
+    const toUpdate = {
+      ...existingData[0],
+      rate: updateExchangeRateDto.rate,
+    };
+
+    try {
+      await this.exchangeRateRepository.update(
+        { id: existingData[0].id },
+        toUpdate,
+      );
+      return `Currency ${targetCurrency} updated successfully`;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} exchangeRate`;
   }
 
   // finds the exchange rate

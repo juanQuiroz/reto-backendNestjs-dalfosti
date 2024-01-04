@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  delfosti-retoBackend-nestjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: delfosti-reto-nest-app
+    container_name: delfosti-reto-nest-app
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    environment:
+      PORT: ${PORT}
