@@ -4,13 +4,13 @@ export class CreateExchangeRateDto {
   @IsString()
   @MinLength(3)
   @MaxLength(3)
-  originCurrency?: string;
+  monedaOrigen: string;
 
   @IsString()
   @MinLength(3)
   @MaxLength(3)
-  targetCurrency?: string;
+  monedaDestino: string;
 
   @IsNumber()
-  rate: number;
+  monto: number;
 }

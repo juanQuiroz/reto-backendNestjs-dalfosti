@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { ExchangeRate } from './entities/exchange-rate.entity';
-// import { CreateExchangeRateDto } from './dto/create-exchange-rate.dto';
+import { CreateExchangeRateDto } from './dto/create-exchange-rate.dto';
 import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 
 @Injectable()
@@ -46,8 +46,8 @@ export class ExchangeRateService implements OnModuleInit {
   //   return 'This action adds a new exchangeRate';
   // }
 
-  async calculateExchange(data: any) {
-    const { monto, monedaOrigen, monedaDestino } = data;
+  async calculateExchange(createExchangeRateDto: CreateExchangeRateDto) {
+    const { monto, monedaOrigen, monedaDestino } = createExchangeRateDto;
 
     // search exchange rate in db
     const exchangeRateOrigin = await this.findExchangeRate(monedaOrigen);

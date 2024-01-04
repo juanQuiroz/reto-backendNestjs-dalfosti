@@ -1,17 +1,19 @@
 import {
   Controller,
-  Get,
+  // Get,
   Post,
   Body,
   // Patch,
   Param,
-  Delete,
+  // Delete,
   Patch,
 } from '@nestjs/common';
 import { ExchangeRateService } from './exchange-rate.service';
-// import { CreateExchangeRateDto } from './dto/create-exchange-rate.dto';
+import { CreateExchangeRateDto } from './dto/create-exchange-rate.dto';
 import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Exchange rate')
 @Controller('exchange-rate')
 export class ExchangeRateController {
   constructor(private readonly exchangeRateService: ExchangeRateService) {}
@@ -22,19 +24,19 @@ export class ExchangeRateController {
   // }
 
   @Post('/calculate')
-  calculateExchange(@Body() data: any) {
-    return this.exchangeRateService.calculateExchange(data);
+  calculateExchange(@Body() createExchangeRateDto: CreateExchangeRateDto) {
+    return this.exchangeRateService.calculateExchange(createExchangeRateDto);
   }
 
-  @Get()
-  findAll() {
-    return this.exchangeRateService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.exchangeRateService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.exchangeRateService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.exchangeRateService.findOne(+id);
+  // }
 
   @Patch(':targetCurrency')
   update(
@@ -47,8 +49,8 @@ export class ExchangeRateController {
     );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.exchangeRateService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.exchangeRateService.remove(+id);
+  // }
 }
